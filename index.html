@@ -192,6 +192,30 @@ public class SuperConstructorExample {
 }
 </pre>
 
+<h2>Super using Instance Variable</h2>
+<button class="copy-button" onclick="copyToClipboard('superInstance')">Copy Code</button>
+<pre id="superInstance">
+class Parent {
+    int x = 10;
+}
+
+class Child extends Parent {
+    int x = 20;
+
+    void display() {
+        System.out.println("Parent class x: " + super.x); // Accessing parent's x
+        System.out.println("Child class x: " + this.x); // Accessing child's x
+    }
+}
+
+public class SuperKeywordExample {
+    public static void main(String[] args) {
+        Child obj = new Child();
+        obj.display();
+    }
+}
+</pre>
+
 <h2>Using this Keyword</h2>
 <button class="copy-button" onclick="copyToClipboard('thisKeyword')">Copy Code</button>
 <pre id="thisKeyword">
