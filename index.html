@@ -16,12 +16,33 @@
             padding: 10px;
             overflow-x: auto;
         }
+        .copy-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
     </style>
+    <script>
+        function copyToClipboard(codeId) {
+            const codeElement = document.getElementById(codeId);
+            navigator.clipboard.writeText(codeElement.innerText)
+                .then(() => {
+                    alert('Code copied to clipboard!');
+                })
+                .catch(err => {
+                    alert('Failed to copy code: ', err);
+                });
+        }
+    </script>
 </head>
 <body>
 
 <h2>Single Inheritance in Java</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('singleInheritance')">Copy Code</button>
+<pre id="singleInheritance">
 public class A {
     public void display() {
         System.out.println("I am a method from class A");
@@ -42,7 +63,8 @@ class B extends A {
 </pre>
 
 <h2>Multiple Inheritance using Interfaces</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('multipleInheritance')">Copy Code</button>
+<pre id="multipleInheritance">
 interface A { void displayA(); } 
 interface B { void displayB(); } 
 
@@ -66,7 +88,8 @@ public class MultipleInheritance {
 </pre>
 
 <h2>Method Overloading</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('methodOverloading')">Copy Code</button>
+<pre id="methodOverloading">
 public class MethodOverloading {
     public void display(int a) {
         System.out.println(a);
@@ -85,7 +108,8 @@ public class MethodOverloading {
 </pre>
 
 <h2>Method Overriding</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('methodOverriding')">Copy Code</button>
+<pre id="methodOverriding">
 // Parent class
 public class ParentClass {
     public void display(int a) {
@@ -116,7 +140,8 @@ public class MethodOverriding {
 </pre>
 
 <h2>Access Modifiers</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('accessModifiers')">Copy Code</button>
+<pre id="accessModifiers">
 class AccessModifiers {
     private void privateMethod() {
         System.out.println("This is a private method.");
@@ -145,7 +170,8 @@ class AccessModifiers {
 </pre>
 
 <h2>Using Super with Constructors</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('superConstructor')">Copy Code</button>
+<pre id="superConstructor">
 class ParentClass {
     ParentClass() {
         System.out.println("ParentClass constructor called");
@@ -167,7 +193,8 @@ public class SuperConstructorExample {
 </pre>
 
 <h2>Using this Keyword</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('thisKeyword')">Copy Code</button>
+<pre id="thisKeyword">
 class CurrentClass {
     void methodOne() {
         System.out.println("Method One is called");
@@ -186,7 +213,8 @@ class CurrentClass {
 </pre>
 
 <h2>Box Volume Calculation</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('boxClass')">Copy Box Class Code</button>
+<pre id="boxClass">
 package Constructor;
 
 public class Box {
@@ -206,7 +234,8 @@ public class Box {
 }
 </pre>
 
-<pre>
+<button class="copy-button" onclick="copyToClipboard('boxVolume')">Copy BoxVolume Class Code</button>
+<pre id="boxVolume">
 package Constructor;
 
 public class BoxVolume {
@@ -220,7 +249,8 @@ public class BoxVolume {
 </pre>
 
 <h2>Adding a Button with Action Listener</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('buttonExample')">Copy Code</button>
+<pre id="buttonExample">
 import javax.swing.*; 
 import java.awt.event.*; 
 
@@ -239,7 +269,8 @@ public class ButtonExample {
 </pre>
 
 <h2>Adding a Label to Frame</h2>
-<pre>
+<button class="copy-button" onclick="copyToClipboard('labelExample')">Copy Code</button>
+<pre id="labelExample">
 import javax.swing.*; 
 
 public class LabelExample { 
