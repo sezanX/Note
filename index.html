@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Code Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        pre {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-x: auto;
+        }
+        .copy-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script>
+        function copyToClipboard(codeId) {
+            const codeElement = document.getElementById(codeId);
+            navigator.clipboard.writeText(codeElement.innerText)
+                .then(() => {
+                    alert('Code copied to clipboard!');
+                })
+                .catch(err => {
+                    alert('Failed to copy code: ', err);
+                });
+        }
+    </script>
+</head>
+<body>
+
+<h2>Single Inheritance in Java</h2>
+<button class="copy-button" onclick="copyToClipboard('singleInheritance')">Copy Code</button>
+<pre id="singleInheritance">
+public class A {
+    public void display() {
+        System.out.println("I am a method from class A");
+    }
+}
+
+class B extends A {
+    public void print() {
+        System.out.println("I am a method from class B");
+    }
+
+    public static void main(String[] args) {
+        B objB = new B();
+        objB.display(); // Reusing the method of A named display
+        objB.print();    
+    }
+}
+</pre>
+
+<h2>Multiple Inheritance using Interfaces</h2>
+<button class="copy-button" onclick="copyToClipboard('multipleInheritance')">Copy Code</button>
+<pre id="multipleInheritance">
+interface A { void displayA(); } 
+interface B { void displayB(); } 
+
+class C implements A, B {
+    public void displayA() {
+        System.out.println("Method from Interface A."); 
+    }
+    
+    public void displayB() { 
+        System.out.println("Method from Interface B."); 
+    } 
+}
+
+public class MultipleInheritance { 
+    public static void main(String[] args) {
+        C obj = new C(); 
+        obj.displayA(); 
+        obj.displayB(); 
+    } 
+}
+</pre>
+
+<h2>Method Overloading</h2>
+<button class="copy-button" onclick="copyToClipboard('methodOverloading')">Copy Code</button>
+<pre id="methodOverloading">
+public class MethodOverloading {
+    public void display(int a) {
+        System.out.println(a);
+    }
+
+    public void display(int a, int b) {
+        System.out.println(a + b);
+    }
+
+    public static void main(String[] args) {
+        MethodOverloading obj = new MethodOverloading();
+        obj.display(5); 
+        obj.display(5, 10); 
+    }
+}
+</pre>
+
+<h2>Method Overriding</h2>
+<button class="copy-button" onclick="copyToClipboard('methodOverriding')">Copy Code</button>
+<pre id="methodOverriding">
+// Parent class
+public class ParentClass {
+    public void display(int a) {
+        System.out.println("Parent Class: " + a);
+    }
+}
+
+// Child class
+public class ChildClass extends ParentClass {
+    @Override
+    public void display(int a) {
+        System.out.println("Child Class: " + a);
+    }
+}
+
+public class MethodOverriding {
+    public static void main(String[] args) {
+        ParentClass parent = new ParentClass();
+        parent.display(5); // Calls the display method in ParentClass
+
+        ChildClass child = new ChildClass();
+        child.display(5); // Calls the overridden display method in ChildClass
+
+        ParentClass polymorphic = new ChildClass();
+        polymorphic.display(5); // Calls the overridden display method in ChildClass
+    }
+}
+</pre>
+
+<h2>Access Modifiers</h2>
+<button class="copy-button" onclick="copyToClipboard('accessModifiers')">Copy Code</button>
+<pre id="accessModifiers">
+class AccessModifiers {
+    private void privateMethod() {
+        System.out.println("This is a private method.");
+    }
+
+    void defaultMethod() {
+        System.out.println("This is a default method.");
+    }
+    
+    protected void protectedMethod() {
+        System.out.println("This is a protected method.");
+    }
+    
+    public void publicMethod() {
+        System.out.println("This is a public method.");
+    }
+
+    public static void main(String[] args) {
+        AccessModifiers obj = new AccessModifiers();
+        obj.privateMethod();  
+        obj.defaultMethod();  
+        obj.protectedMethod();  
+        obj.publicMethod();  
+    }
+}
+</pre>
+
+<h2>Using Super with Constructors</h2>
+<button class="copy-button" onclick="copyToClipboard('superConstructor')">Copy Code</button>
+<pre id="superConstructor">
+class ParentClass {
+    ParentClass() {
+        System.out.println("ParentClass constructor called");
+    }
+}
+
+class ChildClass extends ParentClass {
+    ChildClass() {
+        super();
+        System.out.println("ChildClass constructor called");
+    }
+}
+
+public class SuperConstructorExample {
+    public static void main(String[] args) {
+        ChildClass child = new ChildClass();
+    }
+}
+</pre>
+
+<h2>Using this Keyword</h2>
+<button class="copy-button" onclick="copyToClipboard('thisKeyword')">Copy Code</button>
+<pre id="thisKeyword">
+class CurrentClass {
+    void methodOne() {
+        System.out.println("Method One is called");
+        this.methodTwo();
+    }
+
+    void methodTwo() {
+        System.out.println("Method Two is called");
+    }
+
+    public static void main(String[] args) {
+        CurrentClass obj = new CurrentClass();
+        obj.methodOne(); 
+    }
+}
+</pre>
+
+<h2>Box Volume Calculation</h2>
+<button class="copy-button" onclick="copyToClipboard('boxVolume')">Copy Code</button>
+<pre id="boxVolume">
+package Constructor;
+
+public class Box {
+    double height;
+    double weight;
+    double depth;
+    
+    public Box(double height, double weight, double depth) {
+        this.height = height;
+        this.weight = weight;
+        this.depth = depth;
+    }
+    
+    void Display() {
+        System.out.println(this.height * this.weight * this.depth + " Volume of Box");
+    }
+}
+</pre>
+
+<pre>
+package Constructor;
+
+public class BoxVolume {
+    public static void main(String[] args) {
+        Box obj = new Box(10, 10, 10);
+        obj.Display();
+        Box obj2 = new Box(20, 10, 10);
+        obj2.Display();
+    }
+}
+</pre>
+
+<h2>Adding a Button with Action Listener</h2>
+<button class="copy-button" onclick="copyToClipboard('buttonExample')">Copy Code</button>
+<pre id="buttonExample">
+import javax.swing.*; 
+import java.awt.event.*; 
+
+public class ButtonExample { 
+    public static void main(String[] args) { 
+        JFrame frame = new JFrame("Button Example"); 
+        JButton button = new JButton("Click Me"); 
+        button.setBounds(50, 100, 95, 30); 
+        button.addActionListener(e -> System.out.println("Button Clicked!")); 
+        frame.add(button); 
+        frame.setSize(400, 400); 
+        frame.setLayout(null); 
+        frame.setVisible(true); 
+    } 
+}
+</pre>
+
+<h2>Adding a Label to Frame</h2>
+<button class="copy-button" onclick="copyToClipboard('labelExample')">Copy Code</button>
+<pre id="labelExample">
+import javax.swing.*; 
+
+public class LabelExample { 
+    public static void main(String[] args) { 
+        JFrame frame = new JFrame("Label Example"); 
+        JLabel label = new JLabel("Hello, Swing!"); 
+        label.setBounds(50, 100, 150, 30); 
+        frame.add(label); 
+        frame.setSize(400, 400); 
+        frame.setLayout(null); 
+        frame.setVisible(true); 
+    } 
+}
+</pre>
+
+</body>
+</html>
