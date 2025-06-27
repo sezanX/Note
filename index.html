@@ -12,20 +12,46 @@
             font-family: 'Inter', sans-serif;
             background-color: #ffffff;
         }
+        .code-container {
+            position: relative;
+        }
         pre {
             background-color: #f3f4f6; /* light gray background for code */
             border: 1px solid #e5e7eb; /* lighter gray border */
             border-radius: 0.5rem; /* rounded corners */
             padding: 1rem;
-            white-space: pre-wrap;       /* Since CSS 2.1 */
-            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-            white-space: -pre-wrap;      /* Opera 4-6 */
-            white-space: -o-pre-wrap;    /* Opera 7 */
-            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        /* Styles for collapsible code blocks */
+        pre.collapsible {
+            max-height: 250px; /* Initial height */
+            overflow-y: hidden;
+            transition: max-height 0.4s ease-in-out;
+            padding-bottom: 3rem; /* Space for the 'Show More' button */
+        }
+        pre.collapsible.expanded {
+            max-height: 1500px; /* A large value to show all content */
+        }
+        .toggle-view-btn {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0.75rem;
+            text-align: center;
+            background: linear-gradient(to top, #f3f4f6 70%, transparent);
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            color: #2563eb;
+            font-weight: 600;
+            cursor: pointer;
+            display: none; /* Hidden by default */
         }
         code {
             font-family: 'Fira Code', monospace;
             color: #111827; /* dark gray text */
+            font-size: 0.875rem; /* 14px */
         }
         /* Style for the copy button feedback */
         .copied-feedback {
@@ -41,7 +67,8 @@
         <div class="mb-12">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Binary Search</h2>
             <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
-            <pre><code class="language-c" id="code-binarySearch">#include&lt;stdio.h&gt;
+            <div class="code-container">
+                <pre class="collapsible"><code class="language-c" id="code-binarySearch">#include&lt;stdio.h&gt;
 
 int binarySearch(int arr[], int left, int right, int value){
     while (left&lt;=right)
@@ -73,13 +100,16 @@ int main(){
         printf("index of the value is: %d\n",result);
     }
 }</code></pre>
+                <div class="toggle-view-btn">Show More</div>
+            </div>
         </div>
 
         <!-- Code Snippet: Linear Search -->
         <div class="mb-12">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Linear Search</h2>
             <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
-            <pre><code class="language-c" id="code-linearSearch">#include &lt;stdio.h&gt;
+            <div class="code-container">
+                <pre class="collapsible"><code class="language-c" id="code-linearSearch">#include &lt;stdio.h&gt;
 
 int main() {
 
@@ -98,13 +128,16 @@ for (i=0;i&lt;arr_size;i++)
 
     return 0;
 }</code></pre>
+                <div class="toggle-view-btn">Show More</div>
+            </div>
         </div>
 
         <!-- Code Snippet: Stack -->
         <div class="mb-12">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Stack</h2>
             <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
-            <pre><code class="language-c" id="code-stack">#include &lt;stdio.h&gt;
+            <div class="code-container">
+                <pre class="collapsible"><code class="language-c" id="code-stack">#include &lt;stdio.h&gt;
 
 int stack[100], n=100, top=-1;
 void push(int x)
@@ -149,13 +182,16 @@ IsEmpty();
 
     return 0;
 }</code></pre>
+                <div class="toggle-view-btn">Show More</div>
+            </div>
         </div>
 
         <!-- Code Snippet: String Match -->
         <div class="mb-12">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">String Match</h2>
             <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
-            <pre><code class="language-c" id="code-stringMatch">#include &lt;stdio.h&gt;
+            <div class="code-container">
+                <pre class="collapsible"><code class="language-c" id="code-stringMatch">#include &lt;stdio.h&gt;
 
 int main() {
 char str1[14]={'a','a','b','c','c','a','t','d','b','a','f','a','b','d'};
@@ -187,43 +223,59 @@ for(i=0;i&lt;str1_size-str2_size;i++)
 
     return 0;
 }</code></pre>
+                <div class="toggle-view-btn">Show More</div>
+            </div>
         </div>
 
     </div>
 
     <script>
-        // --- JavaScript for Copy Functionality ---
         document.addEventListener('DOMContentLoaded', function () {
+            // --- JavaScript for Copy Functionality ---
             const copyButtons = document.querySelectorAll('.copy-btn');
-
             copyButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    // Find the 'pre' element that is a sibling of the button
-                    const codeBlock = button.nextElementSibling.querySelector('code');
+                    const codeContainer = button.nextElementSibling;
+                    const codeBlock = codeContainer.querySelector('code');
                     const codeText = codeBlock.innerText;
 
-                    // Create a temporary textarea to hold the text and copy it
                     const textArea = document.createElement('textarea');
                     textArea.value = codeText;
                     document.body.appendChild(textArea);
                     textArea.select();
                     try {
-                        document.execCommand('copy'); // Use execCommand as it's widely supported
-                        // Visual feedback
+                        document.execCommand('copy');
                         button.textContent = 'Copied!';
                         button.classList.add('copied-feedback');
                     } catch (err) {
                         console.error('Failed to copy text: ', err);
                         button.textContent = 'Error!';
                     }
-                    
                     document.body.removeChild(textArea);
 
-                    // Reset button text after 2 seconds
                     setTimeout(() => {
                         button.textContent = 'Copy Code';
                         button.classList.remove('copied-feedback');
                     }, 2000);
+                });
+            });
+
+            // --- JavaScript for Show More/Less Functionality ---
+            const toggleButtons = document.querySelectorAll('.toggle-view-btn');
+            toggleButtons.forEach(button => {
+                const preElement = button.previousElementSibling;
+                // Only show the button if the code block is taller than the collapsed height
+                if (preElement.scrollHeight > 250) {
+                    button.style.display = 'block';
+                }
+
+                button.addEventListener('click', (e) => {
+                    preElement.classList.toggle('expanded');
+                    if (preElement.classList.contains('expanded')) {
+                        e.target.textContent = 'Show Less';
+                    } else {
+                        e.target.textContent = 'Show More';
+                    }
                 });
             });
         });
