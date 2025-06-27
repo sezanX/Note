@@ -1,154 +1,56 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C Code Examples</title>
+    <title>Code Snippets</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        /* Custom font for body and code */
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        .code-section {
-            margin: 20px 0;
-            background: white;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .code-section h2 {
-            margin: 0 0 10px;
-            color: #444;
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
         }
         pre {
-            background: #f8f8f8;
-            padding: 10px;
-            border-radius: 5px;
-            max-height: 200px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            position: relative;
+            background-color: #f3f4f6; /* light gray background for code */
+            border: 1px solid #e5e7eb; /* lighter gray border */
+            border-radius: 0.5rem; /* rounded corners */
+            padding: 1rem;
+            white-space: pre-wrap;       /* Since CSS 2.1 */
+            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
         }
-        pre.full {
-            max-height: none;
+        code {
+            font-family: 'Fira Code', monospace;
+            color: #111827; /* dark gray text */
         }
-        .button-group {
-            margin-top: 10px;
-        }
-        button {
-            padding: 8px 30px; /* Increased width (more horizontal padding), decreased height (less vertical padding) */
-            margin-right: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background: #007bff;
-            color: white;
-            font-size: 16px;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        button.copied {
-            background: #28a745;
+        /* Style for the copy button feedback */
+        .copied-feedback {
+            background-color: #10B981 !important; /* Green-500 */
         }
     </style>
 </head>
-<body>
-    <!-- String Match -->
-    <div class="code-section">
-        <h2>String Match</h2>
-        <pre id="code1"><code>#include <stdio.h>
+<body class="antialiased text-gray-800">
 
-int main() {
-char str1[14]={'a','a','b','c','a','a','b','d','b','a','f','a','b','d'};
-char str2[3]={'a','a','b'};
+    <div class="container mx-auto px-4 py-8 md:py-12 max-w-4xl">
 
-int str1_size=14;
-int str2_size=3;
-
-int i=0,j=0,m=0;
-
-for(i=0;i<(str1_size-str2_size+1);i++)
-{
-    
-    for(j=0;j<str2_size;j++)
-    {
-    if(str1[i+j]==str2[j])
-    {
-        m=m+1;
-    }
-    else
-    {
-        m=0;
-        break;
-    }
-    }
-    if(m==str2_size)
-    {printf("Matched\n");}
-}
-
-    return 0;
-}
-</code></pre>
-        <div class="button-group">
-            <button onclick="copyCode('code1', this)">Copy</button>
-            <button onclick="toggleCode('code1', this)">View Full Code</button>
-        </div>
-    </div>
-
-    <!-- Binary Search -->
-    <div class="code-section">
-        <h2>Binary Search</h2>
-        <pre id="code2"><code>#include<stdio.h>
+        <!-- Code Snippet: Binary Search -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Binary Search</h2>
+            <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
+            <pre><code class="language-c" id="code-binarySearch">#include&lt;stdio.h&gt;
 
 int binarySearch(int arr[], int left, int right, int value){
-    while (left<=right)
+    while (left&lt;=right)
     {
-        int mid = left+ (( right-left)/2);
+        int mid = left + (( right-left)/2);
         if(arr[mid]==value){
             return mid;
         }
-        if(arr[mid]<value){
+        if(arr[mid]&lt;value){
             left=mid+1;
         }
         else{
@@ -170,18 +72,14 @@ int main(){
     else{
         printf("index of the value is: %d\n",result);
     }
-}
-</code></pre>
-        <div class="button-group">
-            <button onclick="copyCode('code2', this)">Copy</button>
-            <button onclick="toggleCode('code2', this)">View Full Code</button>
+}</code></pre>
         </div>
-    </div>
 
-    <!-- Linear Search -->
-    <div class="code-section">
-        <h2>Linear Search</h2>
-        <pre id="code3"><code>#include <stdio.h>
+        <!-- Code Snippet: Linear Search -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Linear Search</h2>
+            <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
+            <pre><code class="language-c" id="code-linearSearch">#include &lt;stdio.h&gt;
 
 int main() {
 
@@ -192,33 +90,26 @@ scanf("%d", &value);
 int arr_size=5;
 int i=0;
 
-for (i=0;i<arr_size;i++)
+for (i=0;i&lt;arr_size;i++)
 {
-    if(arr[i]==value)
-{
-    printf("value %d found at index %d",value,i);
-}
-    
-}
+    if(arr[i]==value){
+    printf("value %d found at index %d",value,i);}
+    }
 
     return 0;
-}
-</code></pre>
-        <div class="button-group">
-            <button onclick="copyCode('code3', this)">Copy</button>
-            <button onclick="toggleCode('code3', this)">View Full Code</button>
+}</code></pre>
         </div>
-    </div>
 
-    <!-- Stack -->
-    <div class="code-section">
-        <h2>Stack</h2>
-        <pre id="code4"><code>#include <stdio.h>
+        <!-- Code Snippet: Stack -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Stack</h2>
+            <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
+            <pre><code class="language-c" id="code-stack">#include &lt;stdio.h&gt;
 
 int stack[100], n=100, top=-1;
 void push(int x)
 {
-    if(top>=n-1)
+    if(top&gt;=n-1)
     {printf("stack overflow");}
         
     else
@@ -257,34 +148,86 @@ pop();
 IsEmpty();
 
     return 0;
-}
-</code></pre>
-        <div class="button-group">
-            <button onclick="copyCode('code4', this)">Copy</button>
-            <button onclick="toggleCode('code4', this)">View Full Code</button>
+}</code></pre>
         </div>
+
+        <!-- Code Snippet: String Match -->
+        <div class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">String Match</h2>
+            <button class="copy-btn bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mb-4 transition-colors duration-300">Copy Code</button>
+            <pre><code class="language-c" id="code-stringMatch">#include &lt;stdio.h&gt;
+
+int main() {
+char str1[14]={'a','a','b','c','c','a','t','d','b','a','f','a','b','d'};
+char str2[3]={'c','a','t'}; // 11 
+
+int str1_size=14;
+int str2_size=3;
+
+int i=0,j=0,m=0;
+
+for(i=0;i&lt;str1_size-str2_size;i++)
+{
+    
+    for(j=0;j&lt;str2_size;j++)
+    {
+        if(str1[i+j]==str2[j])
+        {
+            m=m+1;
+        }
+        else
+        {
+            m=0;
+            break;
+        }
+    }
+    if(m==str2_size)
+    {printf("Matched\n");}
+}
+
+    return 0;
+}</code></pre>
+        </div>
+
     </div>
 
     <script>
-        function copyCode(preId, button) {
-            const code = document.getElementById(preId).querySelector('code').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                button.textContent = 'Copied!';
-                button.classList.add('copied');
-                setTimeout(() => {
-                    button.textContent = 'Copy';
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        }
+        // --- JavaScript for Copy Functionality ---
+        document.addEventListener('DOMContentLoaded', function () {
+            const copyButtons = document.querySelectorAll('.copy-btn');
 
-        function toggleCode(preId, button) {
-            const pre = document.getElementById(preId);
-            pre.classList.toggle('full');
-            button.textContent = pre.classList.contains('full') ? 'Hide Full Code' : 'View Full Code';
-        }
+            copyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Find the 'pre' element that is a sibling of the button
+                    const codeBlock = button.nextElementSibling.querySelector('code');
+                    const codeText = codeBlock.innerText;
+
+                    // Create a temporary textarea to hold the text and copy it
+                    const textArea = document.createElement('textarea');
+                    textArea.value = codeText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy'); // Use execCommand as it's widely supported
+                        // Visual feedback
+                        button.textContent = 'Copied!';
+                        button.classList.add('copied-feedback');
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                        button.textContent = 'Error!';
+                    }
+                    
+                    document.body.removeChild(textArea);
+
+                    // Reset button text after 2 seconds
+                    setTimeout(() => {
+                        button.textContent = 'Copy Code';
+                        button.classList.remove('copied-feedback');
+                    }, 2000);
+                });
+            });
+        });
     </script>
+
 </body>
 </html>
