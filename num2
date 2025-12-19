@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Numerical Methods Explained</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .method {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+        .method h2 {
+            background: #3498db;
+            color: white;
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 1.4em;
+        }
+        .content {
+            padding: 20px;
+        }
+        .subsection {
+            margin-bottom: 25px;
+        }
+        .subsection h3 {
+            color: #2980b9;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+        pre, code {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+        }
+        .code-block {
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #1e1e1e;
+            color: #ddd;
+            font-size: 13px;
+        }
+        .copy-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background: #219653;
+        }
+        .code-body {
+            max-height: 150px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .code-body.expanded {
+            max-height: 1000px;
+        }
+        .toggle-code {
+            color: #3498db;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        pre {
+            margin: 0;
+            padding: 15px;
+            color: #f8f8f2;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        /* Syntax Highlighting */
+        .comment { color: #75715e; }
+        .keyword { color: #f92672; }
+        .function { color: #66d9ef; }
+        .string { color: #a6e22e; }
+        .number { color: #ae81ff; }
+        .operator { color: #f8f8f2; }
+        .builtin { color: #a6e22e; }
+        .module { color: #fd971f; }
+        .latex {
+            font-family: 'Cambria Math', 'Times New Roman', serif;
+            font-style: italic;
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Numerical Methods: Definition, Math, Code & Explanation</h1>
+
+    <!-- Method 1: Bisection -->
+    <div class="method">
+        <h2>1. Bisection Method</h2>
+        <div class="content">
+            <div class="subsection">
+                <h3>Definition</h3>
+                <p>
+                    The bisection method is a root-finding algorithm that repeatedly bisects an interval and selects a subinterval in which a root must lie, based on the Intermediate Value Theorem. It requires that the function changes sign over the interval <span class="latex">[a, b]</span>.
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Mathematical Example</h3>
+                <p>
+                    Find a root of <span class="latex">f(x) = x³ - x - 2</span> in <span class="latex">[1, 2]</span>.<br>
+                    Since <span class="latex">f(1) = -2 < 0</span> and <span class="latex">f(2) = 4 > 0</span>, a root exists in this interval.<br>
+                    The method computes midpoints: <span class="latex">c = (a + b)/2</span>, and updates the interval based on the sign of <span class="latex">f(c)</span>.
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Python Code</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Bisection Method</span>
+                        <button class="copy-btn" onclick="copyCode('bisectionCode', this)">Copy</button>
+                    </div>
+                    <div class="code-body" id="bisectionBody">
+                        <pre><code id="bisectionCode"><span class="keyword">import</span> <span class="module">math</span>
+
+<span class="keyword">def</span> <span class="function">func</span>(x):
+    <span class="keyword">return</span> x<span class="operator">**</span><span class="number">3</span> <span class="operator">-</span> x <span class="operator">-</span> <span class="number">2</span>
+
+<span class="keyword">def</span> <span class="function">bisection</span>(f, a, b, tol<span class="operator">=</span><span class="number">1e-10</span>, max_iter<span class="operator">=</span><span class="number">100</span>):
+    <span class="keyword">if</span> f(a) <span class="operator">*</span> f(b) <span class="operator">&gt;=</span> <span class="number">0</span>:
+        <span class="builtin">print</span>(<span class="string">"Bisection method fails: f(a) and f(b) must have opposite signs."</span>)
+        <span class="keyword">return</span> <span class="builtin">None</span>
+    
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(max_iter):
+        mid <span class="operator">=</span> (a <span class="operator">+</span> b) <span class="operator">/</span> <span class="number">2</span>
+        f_mid <span class="operator">=</span> f(mid)
+        
+        <span class="keyword">if</span> <span class="builtin">abs</span>(f_mid) <span class="operator">&lt;</span> tol:
+            <span class="keyword">return</span> mid
+            
+        <span class="keyword">if</span> f(a) <span class="operator">*</span> f_mid <span class="operator">&lt;</span> <span class="number">0</span>:
+            b <span class="operator">=</span> mid
+        <span class="keyword">else</span>:
+            a <span class="operator">=</span> mid
+    
+    <span class="builtin">print</span>(<span class="string">"Bisection method did not converge."</span>)
+    <span class="keyword">return</span> <span class="builtin">None</span>
+
+root <span class="operator">=</span> bisection(func, <span class="number">1</span>, <span class="number">2</span>)
+<span class="builtin">print</span>(<span class="string">"Root found:"</span>, root)</code></pre>
+                    </div>
+                    <div class="toggle-code" onclick="toggleCode('bisectionBody')">Show more</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Code Explanation</h3>
+                <ul>
+                    <li><strong><code>func(x)</code></strong>: Defines the target function <span class="latex">f(x) = x³ - x - 2</span>.</li>
+                    <li><strong>Initial check</strong>: Ensures <span class="latex">f(a)</span> and <span class="latex">f(b)</span> have opposite signs.</li>
+                    <li><strong>Loop</strong>: Computes midpoint <code>mid</code> and evaluates <code>f(mid)</code>.</li>
+                    <li><strong>Update interval</strong>: Replaces <code>a</code> or <code>b</code> based on sign of <code>f(mid)</code>.</li>
+                    <li><strong>Convergence</strong>: Stops when <code>|f(mid)| &lt; tol</code> (here, <code>1e-10</code>).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Method 2: Newton-Raphson -->
+    <div class="method">
+        <h2>2. Newton-Raphson Method</h2>
+        <div class="content">
+            <div class="subsection">
+                <h3>Definition</h3>
+                <p>
+                    An iterative root-finding method that uses the first derivative to approximate the root. Starting from an initial guess <span class="latex">x₀</span>, it uses the tangent line to converge quadratically under good conditions.
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Mathematical Example</h3>
+                <p>
+                    Solve <span class="latex">f(x) = x² - 2 = 0</span> → root is <span class="latex">√2 ≈ 1.414</span>.<br>
+                    Derivative: <span class="latex">f'(x) = 2x</span>.<br>
+                    Iteration: <span class="latex">x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} = x_n - \frac{x_n² - 2}{2x_n}</span>.
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Python Code</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Newton-Raphson Method</span>
+                        <button class="copy-btn" onclick="copyCode('newtonCode', this)">Copy</button>
+                    </div>
+                    <div class="code-body" id="newtonBody">
+                        <pre><code id="newtonCode"><span class="keyword">def</span> <span class="function">f</span>(x):
+    <span class="keyword">return</span> x<span class="operator">**</span><span class="number">2</span> <span class="operator">-</span> <span class="number">2</span>
+
+<span class="keyword">def</span> <span class="function">df</span>(x):
+    <span class="keyword">return</span> <span class="number">2</span> <span class="operator">*</span> x
+
+<span class="keyword">def</span> <span class="function">newton_raphson</span>(f, df, x0, tol<span class="operator">=</span><span class="number">1e-6</span>, max_iter<span class="operator">=</span><span class="number">100</span>):
+    x <span class="operator">=</span> x0
+    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="builtin">range</span>(max_iter):
+        fx <span class="operator">=</span> f(x)
+        dfx <span class="operator">=</span> df(x)
+        <span class="keyword">if</span> dfx <span class="operator">==</span> <span class="number">0</span>:
+            <span class="keyword">raise</span> <span class="builtin">ValueError</span>(<span class="string">"Derivative is zero."</span>)
+        x_new <span class="operator">=</span> x <span class="operator">-</span> fx <span class="operator">/</span> dfx
+        <span class="keyword">if</span> <span class="builtin">abs</span>(x_new <span class="operator">-</span> x) <span class="operator">&lt;</span> tol:
+            <span class="keyword">return</span> x_new
+        x <span class="operator">=</span> x_new
+    <span class="keyword">raise</span> <span class="builtin">RuntimeError</span>(<span class="string">"Did not converge"</span>)
+
+root <span class="operator">=</span> newton_raphson(f, df, <span class="number">1.0</span>)
+<span class="builtin">print</span>(<span class="string">"Root:"</span>, root)</code></pre>
+                    </div>
+                    <div class="toggle-code" onclick="toggleCode('newtonBody')">Show more</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Code Explanation</h3>
+                <ul>
+                    <li><strong><code>f(x)</code> and <code>df(x)</code></strong>: Function and its derivative.</li>
+                    <li><strong>Iteration</strong>: Updates estimate using tangent line: <code>x_new = x - f(x)/f'(x)</code>.</li>
+                    <li><strong>Stopping criterion</strong>: When successive estimates differ by less than <code>tol</code>.</li>
+                    <li><strong>Error handling</strong>: Raises error if derivative is zero (horizontal tangent).</li>
+                    <li><strong>Convergence</strong>: Quadratic near simple roots, but requires good initial guess.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Method 3: Secant Method -->
+    <div class="method">
+        <h2>3. Secant Method</h2>
+        <div class="content">
+            <div class="subsection">
+                <h3>Definition</h3>
+                <p>
+                    A root-finding algorithm that uses a succession of roots of secant lines to approximate a root. It is similar to Newton-Raphson but does **not require the derivative**—instead, it uses a numerical approximation of the derivative from two previous points.
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Mathematical Example</h3>
+                <p>
+                    For <span class="latex">f(x) = x³ - x - 2</span>, choose initial guesses <span class="latex">x₀ = 1</span>, <span class="latex">x₁ = 2</span>.<br>
+                    Iteration formula: 
+                    <div style="text-align:center; margin:10px 0;">
+                        <span class="latex">x_{n+1} = x_n - f(x_n) \cdot \frac{x_n - x_{n-1}}{f(x_n) - f(x_{n-1})}</span>
+                    </div>
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Python Code</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>Secant Method</span>
+                        <button class="copy-btn" onclick="copyCode('secantCode', this)">Copy</button>
+                    </div>
+                    <div class="code-body" id="secantBody">
+                        <pre><code id="secantCode"><span class="keyword">def</span> <span class="function">f</span>(x):
+    <span class="keyword">return</span> x<span class="operator">**</span><span class="number">3</span> <span class="operator">-</span> x <span class="operator">-</span> <span class="number">2</span>
+
+<span class="comment"># Find interval where sign changes</span>
+x0, x1 <span class="operator">=</span> <span class="number">0</span>, <span class="number">0</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">10</span>):
+    <span class="keyword">if</span> f(i) <span class="operator">*</span> f(i<span class="operator">+</span><span class="number">1</span>) <span class="operator">&lt;</span> <span class="number">0</span>:
+        x0, x1 <span class="operator">=</span> i, i<span class="operator">+</span><span class="number">1</span>
+        <span class="keyword">break</span>
+
+<span class="comment"># Secant iteration</span>
+<span class="keyword">while</span> <span class="builtin">True</span>:
+    <span class="keyword">if</span> f(x1) <span class="operator">==</span> f(x0):
+        <span class="builtin">print</span>(<span class="string">"Division by zero"</span>)
+        <span class="keyword">break</span>
+    x2 <span class="operator">=</span> x1 <span class="operator">-</span> f(x1) <span class="operator">*</span> (x1 <span class="operator">-</span> x0) <span class="operator">/</span> (f(x1) <span class="operator">-</span> f(x0))
+    <span class="keyword">if</span> <span class="builtin">abs</span>(x2 <span class="operator">-</span> x1) <span class="operator">&lt;</span> <span class="number">1e-6</span>:
+        <span class="builtin">print</span>(<span class="string">f"Root ≈ {x2:.6f}"</span>)
+        <span class="keyword">break</span>
+    x0, x1 <span class="operator">=</span> x1, x2</code></pre>
+                    </div>
+                    <div class="toggle-code" onclick="toggleCode('secantBody')">Show more</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Code Explanation</h3>
+                <ul>
+                    <li><strong>Initial guess</strong>: Automatically finds <code>[x0, x1]</code> where <code>f</code> changes sign.</li>
+                    <li><strong>No derivative needed</strong>: Uses finite difference <code>(f(x1)-f(x0))/(x1-x0)</code> as slope.</li>
+                    <li><strong>Update rule</strong>: Computes new estimate <code>x2</code> using secant line through <code>(x0,f(x0))</code> and <code>(x1,f(x1))</code>.</li>
+                    <li><strong>Convergence check</strong>: Stops when <code>|x2 - x1| &lt; 1e-6</code>.</li>
+                    <li><strong>Robustness</strong>: Simpler than Newton-Raphson when derivative is unavailable.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Method 4: LU Decomposition -->
+    <div class="method">
+        <h2>4. LU Decomposition (Doolittle)</h2>
+        <div class="content">
+            <div class="subsection">
+                <h3>Definition</h3>
+                <p>
+                    LU decomposition factors a square matrix <span class="latex">A</span> into a lower triangular matrix <span class="latex">L</span> and an upper triangular matrix <span class="latex">U</span> such that <span class="latex">A = LU</span>. It is used to solve systems of linear equations <span class="latex">Ax = b</span> efficiently.
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Mathematical Example</h3>
+                <p>
+                    Solve:
+                    <div style="text-align:center; margin:10px 0;">
+                        <span class="latex">
+                            \begin{bmatrix}
+                            3 & 1 & 1 \\
+                            1 & 2 & 2 \\
+                            2 & 1 & 3
+                            \end{bmatrix}
+                            \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix}
+                            =
+                            \begin{bmatrix} 4 \\ 3 \\ 4 \end{bmatrix}
+                        </span>
+                    </div>
+                    Step 1: Decompose <span class="latex">A = LU</span>.<br>
+                    Step 2: Solve <span class="latex">Ly = b</span> (forward substitution).<br>
+                    Step 3: Solve <span class="latex">Ux = y</span> (backward substitution).
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Python Code</h3>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span>LU Decomposition (Doolittle)</span>
+                        <button class="copy-btn" onclick="copyCode('luCode', this)">Copy</button>
+                    </div>
+                    <div class="code-body" id="luBody">
+                        <pre><code id="luCode"><span class="keyword">import</span> <span class="module">numpy</span> <span class="keyword">as</span> <span class="module">np</span>
+
+A <span class="operator">=</span> <span class="module">np</span>.array([[<span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>],
+              [<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>],
+              [<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>]], dtype<span class="operator">=</span><span class="builtin">float</span>)
+b <span class="operator">=</span> <span class="module">np</span>.array([<span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>], dtype<span class="operator">=</span><span class="builtin">float</span>)
+
+n <span class="operator">=</span> <span class="builtin">len</span>(A)
+L <span class="operator">=</span> <span class="module">np</span>.zeros((n, n))
+U <span class="operator">=</span> <span class="module">np</span>.zeros((n, n))
+
+<span class="comment"># Doolittle: L has 1s on diagonal</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(n):
+    <span class="comment"># Compute U[i, k]</span>
+    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="builtin">range</span>(i, n):
+        U[i, k] <span class="operator">=</span> A[i, k] <span class="operator">-</span> <span class="builtin">sum</span>(L[i, j] <span class="operator">*</span> U[j, k] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i))
+    <span class="comment"># Compute L[k, i]</span>
+    L[i, i] <span class="operator">=</span> <span class="number">1.0</span>
+    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="builtin">range</span>(i<span class="operator">+</span><span class="number">1</span>, n):
+        L[k, i] <span class="operator">=</span> (A[k, i] <span class="operator">-</span> <span class="builtin">sum</span>(L[k, j] <span class="operator">*</span> U[j, i] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i))) <span class="operator">/</span> U[i, i]
+
+<span class="comment"># Forward substitution: Ly = b</span>
+y <span class="operator">=</span> <span class="module">np</span>.zeros(n)
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(n):
+    y[i] <span class="operator">=</span> b[i] <span class="operator">-</span> <span class="builtin">sum</span>(L[i, j] <span class="operator">*</span> y[j] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i))
+
+<span class="comment"># Backward substitution: Ux = y</span>
+x <span class="operator">=</span> <span class="module">np</span>.zeros(n)
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(n<span class="operator">-</span><span class="number">1</span>, <span class="operator">-</span><span class="number">1</span>, <span class="operator">-</span><span class="number">1</span>):
+    x[i] <span class="operator">=</span> (y[i] <span class="operator">-</span> <span class="builtin">sum</span>(U[i, j] <span class="operator">*</span> x[j] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i<span class="operator">+</span><span class="number">1</span>, n))) <span class="operator">/</span> U[i, i]
+
+<span class="builtin">print</span>(<span class="string">"Solution x:"</span>, x)</code></pre>
+                    </div>
+                    <div class="toggle-code" onclick="toggleCode('luBody')">Show more</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Code Explanation</h3>
+                <ul>
+                    <li><strong>Matrix decomposition</strong>: Constructs <code>L</code> (unit lower triangular) and <code>U</code> (upper triangular) using Doolittle’s method.</li>
+                    <li><strong>Forward substitution</strong>: Solves <code>Ly = b</code> for <code>y</code> (since <code>L</code> is lower triangular).</li>
+                    <li><strong>Backward substitution</strong>: Solves <code>Ux = y</code> for <code>x</code> (since <code>U</code> is upper triangular).</li>
+                    <li><strong>Efficiency</strong>: Once <code>A = LU</code> is computed, multiple right-hand sides <code>b</code> can be solved quickly.</li>
+                    <li><strong>Assumption</strong>: Matrix <code>A</code> must be square and non-singular (and ideally diagonally dominant for stability).</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCode(id) {
+            const body = document.getElementById(id);
+            const isExpanded = body.classList.contains('expanded');
+            body.classList.toggle('expanded');
+            const toggle = body.nextElementSibling;
+            toggle.textContent = isExpanded ? 'Show more' : 'Show less';
+        }
+
+        function copyCode(codeId, btn) {
+            const code = document.getElementById(codeId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const original = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = original, 1500);
+            }).catch(err => {
+                alert('Copy failed. Please try manually.');
+                console.error(err);
+            });
+        }
+    </script>
+</body>
+</html>
+
