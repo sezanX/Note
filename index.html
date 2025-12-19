@@ -1,3 +1,5 @@
+<!--
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -281,5 +283,325 @@ for(i=0;i&lt;str1_size-str2_size;i++)
         });
     </script>
 
+</body>
+</html>
+
+
+-->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Numerical Methods Code</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .section-header {
+            padding: 15px 20px;
+            background: #2c3e50;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header:hover {
+            background: #1a252f;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 6px 12px;
+            font-size: 13px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        .toggle-btn {
+            background: #555;
+            color: #fff;
+        }
+        .toggle-btn:hover {
+            background: #333;
+        }
+        .code-container {
+            background: #2d2d2d;
+            max-height: 120px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        .code-container.expanded {
+            max-height: 1000px;
+        }
+        pre {
+            margin: 0;
+            padding: 20px;
+            color: #f8f8f2;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .overlay {
+            height: 40px;
+            background: linear-gradient(to top, #2d2d2d, transparent);
+            pointer-events: none;
+            position: relative;
+            top: -40px;
+        }
+        /* Syntax Highlighting */
+        .comment { color: #75715e; }
+        .keyword { color: #f92672; }
+        .function { color: #66d9ef; }
+        .string { color: #a6e22e; }
+        .number { color: #ae81ff; }
+        .operator { color: #f8f8f2; }
+        .builtin { color: #a6e22e; }
+        .module { color: #fd971f; }
+    </style>
+</head>
+<body>
+  <!--  <h1>Numerical Methods Implementations</h1> -->
+
+    <!-- Bisection Method -->
+    <div class="section">
+        <div class="section-header" onclick="toggleCode('bisection')">
+            <span>Bisection Method</span>
+            <div class="controls">
+                <button class="btn copy-btn" onclick="copyCode('bisectionCode', event)">Copy Code</button>
+                <button class="btn toggle-btn" id="bisectionToggle">Show more</button>
+            </div>
+        </div>
+        <div class="code-container" id="bisectionContainer">
+            <pre><code id="bisectionCode"><span class="keyword">import</span> <span class="module">math</span>
+
+<span class="comment"># Define the function</span>
+<span class="keyword">def</span> <span class="function">func</span>(x):
+    <span class="keyword">return</span> x<span class="operator">**</span><span class="number">3</span> <span class="operator">-</span> x <span class="operator">-</span> <span class="number">2</span>
+
+<span class="comment"># Bisection method function</span>
+<span class="keyword">def</span> <span class="function">bisection</span>(f, a, b):
+    tol <span class="operator">=</span> <span class="number">1e-10</span>
+    max_iter <span class="operator">=</span> <span class="number">100</span>
+    
+    <span class="keyword">if</span> f(a) <span class="operator">*</span> f(b) <span class="operator">&gt;=</span> <span class="number">0</span>:
+        <span class="builtin">print</span>(<span class="string">"Bisection method fails: f(a) and f(b) must have opposite signs."</span>)
+        <span class="keyword">return</span> <span class="builtin">None</span>
+    
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(max_iter):
+        mid <span class="operator">=</span> (a <span class="operator">+</span> b)<span class="operator">/</span><span class="number">2</span>
+        f_mid <span class="operator">=</span> f(mid)
+        
+        <span class="keyword">if</span> <span class="builtin">abs</span>(f_mid) <span class="operator">&lt;</span> tol:
+            <span class="keyword">return</span> mid
+            
+        <span class="keyword">if</span> f(a) <span class="operator">*</span> f_mid <span class="operator">&lt;</span> <span class="number">0</span>:
+            b <span class="operator">=</span> mid
+        <span class="keyword">else</span>:
+            a <span class="operator">=</span> mid
+    
+    <span class="builtin">print</span>(<span class="string">"Bisection method did not converge."</span>)
+    <span class="keyword">return</span> <span class="builtin">None</span>
+
+<span class="comment"># Call the method and print result</span>
+root <span class="operator">=</span> bisection(func, <span class="number">1</span>, <span class="number">2</span>)
+<span class="builtin">print</span>(<span class="string">"Root found:"</span>, root)</code></pre>
+            <div class="overlay"></div>
+        </div>
+    </div>
+
+    <!-- Newton-Raphson Method -->
+    <div class="section">
+        <div class="section-header" onclick="toggleCode('newton')">
+            <span>Newton-Raphson Method</span>
+            <div class="controls">
+                <button class="btn copy-btn" onclick="copyCode('newtonCode', event)">Copy Code</button>
+                <button class="btn toggle-btn" id="newtonToggle">Show more</button>
+            </div>
+        </div>
+        <div class="code-container" id="newtonContainer">
+            <pre><code id="newtonCode"><span class="keyword">def</span> <span class="function">f</span>(x):
+    <span class="keyword">return</span> x<span class="operator">**</span><span class="number">2</span> <span class="operator">-</span> <span class="number">2</span>
+
+<span class="keyword">def</span> <span class="function">df</span>(x):
+    <span class="keyword">return</span> <span class="number">2</span> <span class="operator">*</span> x
+
+<span class="keyword">def</span> <span class="function">newton_raphson</span>(f, df, x0, tol<span class="operator">=</span><span class="number">1e-6</span>, max_iter<span class="operator">=</span><span class="number">100</span>):
+    x <span class="operator">=</span> x0
+    <span class="keyword">while</span>(<span class="builtin">True</span>):
+        fx <span class="operator">=</span> f(x)
+        dfx <span class="operator">=</span> df(x)
+        <span class="keyword">if</span> dfx <span class="operator">==</span> <span class="number">0</span>:
+            <span class="keyword">raise</span> <span class="builtin">ValueError</span>(<span class="string">"Derivative is zero. No solution found."</span>)
+        x_new <span class="operator">=</span> x <span class="operator">-</span> fx <span class="operator">/</span> dfx
+        <span class="builtin">print</span>(x_new, x)
+        <span class="keyword">if</span> (<span class="builtin">round</span>(x, <span class="number">2</span>) <span class="operator">==</span> <span class="builtin">round</span>(x_new, <span class="number">2</span>)):
+            <span class="keyword">return</span> x_new
+        x <span class="operator">=</span> x_new
+    
+
+x0 <span class="operator">=</span> <span class="number">1.0</span>
+root <span class="operator">=</span> newton_raphson(f, df, x0)
+<span class="builtin">print</span>(<span class="string">"Root:"</span>, root)</code></pre>
+            <div class="overlay"></div>
+        </div>
+    </div>
+
+    <!-- Secant Method -->
+    <div class="section">
+        <div class="section-header" onclick="toggleCode('secant')">
+            <span>Secant Method</span>
+            <div class="controls">
+                <button class="btn copy-btn" onclick="copyCode('secantCode', event)">Copy Code</button>
+                <button class="btn toggle-btn" id="secantToggle">Show more</button>
+            </div>
+        </div>
+        <div class="code-container" id="secantContainer">
+            <pre><code id="secantCode"><span class="keyword">def</span> <span class="function">f</span>(x):
+    <span class="keyword">return</span> x<span class="operator">**</span><span class="number">3</span> <span class="operator">-</span> x <span class="operator">-</span> <span class="number">2</span>
+
+x0 <span class="operator">=</span> <span class="number">0</span>
+x1 <span class="operator">=</span> <span class="number">0</span>
+
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(<span class="number">0</span>, <span class="number">10</span>):
+    <span class="keyword">if</span> (f(i)<span class="operator">*</span>f(i<span class="operator">+</span><span class="number">1</span>)) <span class="operator">&lt;</span> <span class="number">0</span>:
+        x0 <span class="operator">=</span> i
+        x1 <span class="operator">=</span> i<span class="operator">+</span><span class="number">1</span>
+        <span class="builtin">print</span>(<span class="string">f"x0 = {x0}"</span>)
+        <span class="builtin">print</span>(<span class="string">f"x1 = {x1}"</span>)
+
+<span class="keyword">while</span> <span class="builtin">True</span>:
+    <span class="keyword">if</span> f(x1) <span class="operator">==</span> f(x0) :
+        <span class="builtin">print</span>(<span class="string">"div by 0"</span>)
+        <span class="keyword">break</span>
+
+    x2 <span class="operator">=</span> x1 <span class="operator">-</span> f(x1)<span class="operator">*</span>(x1 <span class="operator">-</span> x0) <span class="operator">/</span> (f(x1) <span class="operator">-</span> f(x0))
+
+    <span class="keyword">if</span> <span class="builtin">round</span>(x2,<span class="number">2</span>) <span class="operator">==</span> <span class="builtin">round</span>(x1,<span class="number">2</span>):
+        <span class="builtin">print</span>(<span class="string">f"root = {round(x2,2)}"</span>)
+        <span class="keyword">break</span>
+    
+    x0 <span class="operator">=</span> x1
+    x1 <span class="operator">=</span> x2</code></pre>
+            <div class="overlay"></div>
+        </div>
+    </div>
+
+    <!-- LU Decomposition -->
+    <div class="section">
+        <div class="section-header" onclick="toggleCode('lu')">
+            <span>LU Decomposition (Doolittle)</span>
+            <div class="controls">
+                <button class="btn copy-btn" onclick="copyCode('luCode', event)">Copy Code</button>
+                <button class="btn toggle-btn" id="luToggle">Show more</button>
+            </div>
+        </div>
+        <div class="code-container" id="luContainer">
+            <pre><code id="luCode"><span class="keyword">import</span> <span class="module">numpy</span> <span class="keyword">as</span> <span class="module">np</span>
+
+<span class="comment"># Example system: Ax = b</span>
+A <span class="operator">=</span> <span class="module">np</span>.array([[<span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>],
+              [<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>],
+              [<span class="number">2</span>, <span class="number">1</span>, <span class="number">3</span>]], dtype<span class="operator">=</span><span class="builtin">float</span>)
+b <span class="operator">=</span> <span class="module">np</span>.array([<span class="number">4</span>, <span class="number">3</span>, <span class="number">4</span>], dtype<span class="operator">=</span><span class="builtin">float</span>)
+
+n <span class="operator">=</span> <span class="builtin">len</span>(A)
+L <span class="operator">=</span> <span class="module">np</span>.zeros((n, n))
+U <span class="operator">=</span> <span class="module">np</span>.zeros((n, n))
+
+<span class="comment"># LU Decomposition (Doolittle method)</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(n):
+    <span class="comment"># Upper Triangular</span>
+    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="builtin">range</span>(i, n):
+        U[i, k] <span class="operator">=</span> A[i, k] <span class="operator">-</span> <span class="builtin">sum</span>(L[i, j] <span class="operator">*</span> U[j, k] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i))
+    <span class="comment"># Lower Triangular</span>
+    L[i, i] <span class="operator">=</span> <span class="number">1</span>
+    <span class="keyword">for</span> k <span class="keyword">in</span> <span class="builtin">range</span>(i<span class="operator">+</span><span class="number">1</span>, n):
+        L[k, i] <span class="operator">=</span> (A[k, i] <span class="operator">-</span> <span class="builtin">sum</span>(L[k, j] <span class="operator">*</span> U[j, i] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i))) <span class="operator">/</span> U[i, i]
+
+<span class="builtin">print</span>(<span class="string">"L:\n"</span>, L)
+<span class="builtin">print</span>(<span class="string">"U:\n"</span>, U)
+
+<span class="comment"># Solve Ly = b (forward substitution)</span>
+y <span class="operator">=</span> <span class="module">np</span>.zeros(n)
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(n):
+    y[i] <span class="operator">=</span> b[i] <span class="operator">-</span> <span class="builtin">sum</span>(L[i, j] <span class="operator">*</span> y[j] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i))
+
+<span class="comment"># Solve Ux = y (backward substitution)</span>
+x <span class="operator">=</span> <span class="module">np</span>.zeros(n)
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="builtin">range</span>(n<span class="operator">-</span><span class="number">1</span>, <span class="operator">-</span><span class="number">1</span>, <span class="operator">-</span><span class="number">1</span>):
+    x[i] <span class="operator">=</span> (y[i] <span class="operator">-</span> <span class="builtin">sum</span>(U[i, j] <span class="operator">*</span> x[j] <span class="keyword">for</span> j <span class="keyword">in</span> <span class="builtin">range</span>(i<span class="operator">+</span><span class="number">1</span>, n))) <span class="operator">/</span> U[i, i]
+
+<span class="builtin">print</span>(<span class="string">"Solution x:"</span>, x)</code></pre>
+            <div class="overlay"></div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCode(sectionId) {
+            const container = document.getElementById(sectionId + 'Container');
+            const btn = document.getElementById(sectionId + 'Toggle');
+            const isExpanded = container.classList.contains('expanded');
+            
+            container.classList.toggle('expanded');
+            btn.textContent = isExpanded ? 'Show more' : 'Show less';
+        }
+
+        function copyCode(codeId, event) {
+            event.stopPropagation(); // Prevent section toggle
+            const codeElement = document.getElementById(codeId);
+            const rawCode = codeElement.textContent;
+
+            navigator.clipboard.writeText(rawCode)
+                .then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 1500);
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    alert('Failed to copy code.');
+                });
+        }
+    </script>
 </body>
 </html>
