@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>8086 Assembly Programs</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 20px;
+      line-height: 1.5;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    .program {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #2c3e50;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+      font-family: inherit;
+    }
+    .copy-btn:hover {
+      background: #1a252f;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-top: 30px;
+    }
+    code {
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>8086 Assembly Programs (DOS / MASM / TASM)</h1>
+  <p><strong>Environment:</strong> Processor: 8086 | Assembler: MASM/TASM | OS: DOSBox/EMU8086</p>
+
+  <!-- Program 1 -->
+  <div class="program">
+    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+    <h2>1️⃣ Number Formation (Input → Output)</h2>
+    <p><em>Reads a 3-digit number character by character, converts ASCII to numeric value, forms the number, and displays it.</em></p>
+    <pre><code>.model small
+.stack 100h
+.data
+    msg db 'Enter 3-digit number: $'
+    outmsg db 13,10,'You entered: $'
+    num dw ?
+.code
+main proc
+    mov ax, @data
+    mov ds, ax
+
+    lea dx, msg
+    mov ah, 09h
+    int 21h
+
+    ; Read first digit
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+    mov bl, al
+    mov bh, 0
+    mov ax, bx
+    mov cx, 100
+    mul cx
+    mov num, ax
+
+    ; Second digit
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+    mov bl, al
+    mov bh, 0
+    mov ax, bx
+    mov cx, 10
+    mul cx
+    add num, ax
+
+    ; Third digit
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+    mov ah, 0
+    add num, ax
+
+    lea dx, outmsg
+    mov ah, 09h
+    int 21h
+
+    mov ax, num
+    call print_number
+
+    mov ah, 4Ch
+    int 21h
+main endp
+
+print_number proc
+    mov bx, 10
+    mov cx, 0
+next:
+    mov dx, 0
+    div bx
+    push dx
+    inc cx
+    cmp ax, 0
+    jne next
+
+print:
+    pop dx
+    add dl, '0'
+    mov ah, 02h
+    int 21h
+    loop print
+    ret
+print_number endp
+end main</code></pre>
+  </div>
+
+  <!-- Program 2 -->
+  <div class="program">
+    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+    <h2>2️⃣ One-Digit Calculator (+ − × ÷)</h2>
+    <p><em>Performs basic arithmetic on single-digit inputs (e.g., 3+2).</em></p>
+    <pre><code>.model small
+.stack 100h
+.data
+    msg db 'Enter digit operator digit (e.g. 3+2): $'
+    res db 13,10,'Result: $'
+.code
+main proc
+    mov ax, @data
+    mov ds, ax
+
+    lea dx, msg
+    mov ah, 09h
+    int 21h
+
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+    mov bl, al
+
+    mov ah, 01h
+    int 21h
+    mov cl, al     ; operator
+
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+    mov bh, al
+
+    cmp cl, '+'
+    je add_op
+    cmp cl, '-'
+    je sub_op
+    cmp cl, '*'
+    je mul_op
+    cmp cl, '/'
+    je div_op
+
+add_op:
+    mov al, bl
+    add al, bh
+    jmp show
+
+sub_op:
+    mov al, bl
+    sub al, bh
+    jmp show
+
+mul_op:
+    mov al, bl
+    mul bh
+    jmp show
+
+div_op:
+    mov al, bl
+    mov ah, 0
+    div bh
+
+show:
+    lea dx, res
+    mov ah, 09h
+    int 21h
+
+    add al, '0'
+    mov dl, al
+    mov ah, 02h
+    int 21h
+
+    mov ah, 4Ch
+    int 21h
+main endp
+end main</code></pre>
+  </div>
+
+  <!-- Program 3 -->
+  <div class="program">
+    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+    <h2>3️⃣ Comparison (Zero / Positive / Negative)</h2>
+    <p><em>Reads a single digit and classifies it as zero, positive, or negative.</em></p>
+    <pre><code>.model small
+.stack 100h
+.data
+    msg db 'Enter a number: $'
+    zero db 13,10,'Zero$'
+    pos  db 13,10,'Positive$'
+    neg  db 13,10,'Negative$'
+.code
+main proc
+    mov ax, @data
+    mov ds, ax
+
+    lea dx, msg
+    mov ah, 09h
+    int 21h
+
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+
+    cmp al, 0
+    je is_zero
+    jg is_pos
+    jl is_neg
+
+is_zero:
+    lea dx, zero
+    jmp print
+is_pos:
+    lea dx, pos
+    jmp print
+is_neg:
+    lea dx, neg
+
+print:
+    mov ah, 09h
+    int 21h
+
+    mov ah, 4Ch
+    int 21h
+main endp
+end main</code></pre>
+  </div>
+
+  <!-- Program 4 -->
+  <div class="program">
+    <button class="copy-btn" onclick="copyCode(this)">Copy Code</button>
+    <h2>4️⃣ Loop – Even / Odd Check </h2>
+    <pre><code>.model small
+.stack 100h
+.data
+    msg1 db 'How many numbers? $'
+    msg2 db 13,10,'Enter number: $'
+    even db 13,10,'Even$'
+    odd  db 13,10,'Odd$'
+.code
+main proc
+    mov ax, @data
+    mov ds, ax
+
+    ; Ask for loop count
+    mov dx, offset msg1
+    mov ah, 09h
+    int 21h
+
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+    mov cl, al
+    mov ch, 0
+
+loop_start:
+    mov dx, offset msg2
+    mov ah, 09h
+    int 21h
+
+    mov ah, 01h
+    int 21h
+    sub al, '0'
+
+    and al, 1
+    jz print_even
+
+    mov dx, offset odd
+    jmp display
+
+print_even:
+    mov dx, offset even
+
+display:
+    mov ah, 09h
+    int 21h
+
+    loop loop_start
+
+    mov ah, 4Ch
+    int 21h
+main endp
+end main
+</code></pre>
+  </div>
+
+  <script>
+    function copyCode(button) {
+      // Find the <pre><code> sibling inside the same .program container
+      const pre = button.parentElement.querySelector('pre code');
+      if (!pre) return;
+
+      const codeText = pre.innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        const originalText = button.textContent;
+        button.textContent = 'Copied!';
+        setTimeout(() => {
+          button.textContent = originalText;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        alert('Copy failed. Please select and copy manually.');
+      });
+    }
+  </script>
+</body>
+</html>
