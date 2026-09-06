@@ -1,4 +1,12 @@
 
+```
+javascript:(function()%7Bvar%20metas=document.getElementsByTagName('meta');for(var%20i=metas.length-1;i%3E=0;i--)%7Bif(metas%5Bi%5D.name&&metas%5Bi%5D.name.toLowerCase()==='viewport')%7Bmetas%5Bi%5D.parentNode.removeChild(metas%5Bi%5D);%7D%7Dvar%20meta=document.createElement('meta');meta.name='viewport';meta.content='width=1280,%20initial-scale=0.3,%20maximum-scale=2.0,%20user-scalable=yes';document.getElementsByTagName('head')%5B0%5D.appendChild(meta);document.body.style.width='1280px';document.documentElement.style.width='1280px';document.body.style.minWidth='1280px';document.documentElement.style.minWidth='1280px';document.body.style.overflowX='auto';try%7BObject.defineProperty(navigator,'userAgent',%7Bget:function()%7Breturn%20'Mozilla/5.0%20(Windows%20NT%2010.0;%20Win64;%20x64)%20AppleWebKit/537.36%20(KHTML,%20like%20Gecko)%20Chrome/114.0.0.0%20Safari/537.36';%7D%7D);%7Dcatch(e)%7B%7Dalert('Extreme%20Desktop%20Mode%20Applied!');%7D)();
+
+```
+
+
+
+
 <!-- https://drive.google.com/drive/folders/13A3_XRpf0PNNRk0-tUewrhS0Yy4Mf0pg
 -->
  https://sezanx.github.io/Note/
